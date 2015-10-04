@@ -9,23 +9,23 @@
 
  Not Completed 
 
-gcc 컴파일시 -lm 옵션주고 컴파일해주세양!! 
 
 */
 
 
-void menu(int *choice);
-int result(int choice);
-void func(int choice);
-void getIP();
+void menu(int *choice);  // print Menu
+int result(int choice);  // print result
+void func(int choice);  
+void getIP(); 
 void getPrefix();
-void getNetAddr(int *ip,int *sm,int *save);
+void getNetAddr(int *ip,int *sm,int *save); 
 void getBcastAddr(int *ip,int *sm,int *save);
 void getSubnetmask(int prefix,int * sm);
 int prefixtodec(int prefix);
 
 
-	int prefix; 
+	int prefix;
+	int hosts; 
 	int ip[4]={0};
 	int sm[4]={0};
 	int na[4]={0}; //네트워크 주소 
@@ -36,7 +36,7 @@ int prefixtodec(int prefix);
 int main(){
 	int choice; 
 
-
+	
 	
 	menu(&choice);
 	
@@ -78,6 +78,8 @@ void func(int choice){
 			getPrefix();
 			break;
 		case 3:
+			getIP();
+			getHost();
 			break;
 			
 		default:
@@ -88,17 +90,34 @@ void func(int choice){
 		
 	}
 	
-	result(1);
+	result(choice);
 	
 }
 
 
 int result(int choice){
-	getSubnetmask(prefix,sm);
-	getNetAddr(ip,sm,na);
-	getBcastAddr(ip,sm,ba);
+	switch(choice){
+		case 1:
+			break;
+		case 2:
+			getSubnetmask(prefix,sm);
+			getNetAddr(ip,sm,na);
+			getBcastAddr(ip,sm,ba);
+			break;
+		case 3:
+			getSubnetmask(host_to_Prefix(hosts),sm);
+			getNetAddr(ip,sm,na);
+			getBcastAddr(ip,sm,ba);
+			break;
+		
+	}
+	
+	
+	
+
 	
 	printf("\n\n\n\n");
+	
 	
 	printf("IP: %d.%d.%d.%d\n",ip[0],ip[1],ip[2],ip[3]);
 	printf("Subnet Mask: %d.%d.%d.%d\n",sm[0],sm[1],sm[2],sm[3]);
@@ -124,6 +143,10 @@ void getPrefix(){
 	scanf("%d",&prefix);
 }
 
+void getHost(){
+	printf("호스트 갯수입력:");
+	scanf("%d",&hosts); 
+}
 
 
 
@@ -231,6 +254,24 @@ int prefixtodec(int prefix){
 		
 	return sm; 
 }
+
+
+int host_to_Prefix(int hosts){
+	int i=0;
+	int temp=0;
+	
+	hosts+=2; // NetAdd+ BcastAddr
+	for(i=0;temp<hosts;i++)
+		temp=(int)pow(2,i);
+
+
+	return 32-(i-1);
+
+}
+
+
+
+
 
 
 
