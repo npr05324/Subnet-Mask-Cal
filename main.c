@@ -28,8 +28,8 @@ int prefixtodec(int prefix);
 	int hosts; 
 	int ip[4]={0};
 	int sm[4]={0};
-	int na[4]={0}; //ë„¤íŠ¸ì›Œí¬ ì£¼ì†Œ 
-	int ba[4]={0}; // ë¸Œë¡œë“œìºìŠ¤íŠ¸ ì£¼ì†Œ 
+	int na[4]={0}; //³×Æ®¿öÅ© ÁÖ¼Ò 
+	int ba[4]={0}; // ºê·ÎµåÄ³½ºÆ® ÁÖ¼Ò 
 	
 
 
@@ -54,11 +54,11 @@ int main(){
 
 void menu(int *choice){
 	printf("-----------------------------------------------------\n");
-	printf("  1,IPì™€ ì„œë¸Œë„· ë§ˆìŠ¤í¬                               \n");
-	printf("  2,IPì™€ ì„œë¸Œë„· í”„ë¦¬í”½ìŠ¤                             \n");
-	printf("  3,IPì™€ í˜¸ìŠ¤íŠ¸ê°¯ìˆ˜                                  \n");
+	printf("  1,IP¿Í ¼­ºê³İ ¸¶½ºÅ©                               \n");
+	printf("  2,IP¿Í ¼­ºê³İ ÇÁ¸®ÇÈ½º                             \n");
+	printf("  3,IP¿Í È£½ºÆ®°¹¼ö                                  \n");
 	printf("-----------------------------------------------------\n");
-	printf("ì„ íƒ(1~3):");
+	printf("¼±ÅÃ(1~3):");
 	scanf("%d",&choice); 
 	
 	
@@ -71,7 +71,9 @@ void func(int choice){
 	
 	switch(choice){
 		case 1:
-			
+			getIP();
+			printf("¼­ºê³İ ¸¶½ºÅ© ÀÔ·Â(255.255.255.255 --> 255 255 255 255)\n: ");
+			scanf("%d %d %d %d",&sm[0],&sm[1],&sm[2],&sm[3]);
 			break;
 		case 2:
 			getIP();
@@ -83,7 +85,7 @@ void func(int choice){
 			break;
 			
 		default:
-			
+			printf("¿Ã¹Ù¸¥ ¼±ÅÃ °ªÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä\n");
 			break;
 			
 		
@@ -98,6 +100,8 @@ void func(int choice){
 int result(int choice){
 	switch(choice){
 		case 1:
+			getNetAddr(ip,sm,na);
+			getBcastAddr(ip,sm,ba);
 			break;
 		case 2:
 			getSubnetmask(prefix,sm);
@@ -133,18 +137,18 @@ int result(int choice){
 
 
 void getIP(){
-	printf("IPì…ë ¥ (8.8.8.8 --> 8 8 8 8 ):");
+	printf("IPÀÔ·Â (8.8.8.8 --> 8 8 8 8 ):");
 	scanf("%d %d %d %d",&ip,&ip[1],&ip[2],&ip[3]); 
 	
 }
 
 void getPrefix(){
-	printf("ì„œë¸Œë„· í”„ë¦¬í”½ìŠ¤ ì…ë ¥:");
+	printf("¼­ºê³İ ÇÁ¸®ÇÈ½º ÀÔ·Â:");
 	scanf("%d",&prefix);
 }
 
 void getHost(){
-	printf("í˜¸ìŠ¤íŠ¸ ê°¯ìˆ˜ì…ë ¥:");
+	printf("È£½ºÆ® °¹¼öÀÔ·Â:");
 	scanf("%d",&hosts); 
 }
 
@@ -186,12 +190,12 @@ void getBcastAddr(int *ip,int *sm,int *save){
 
 
 void getSubnetmask(int prefix,int * sm){
-	int quota=prefix/8; // 1ì˜¥í…Ÿ ì „ë¶€ê°€ 1ì¼ê²½ìš° 255
+	int quota=prefix/8; // 1¿ÁÅİ ÀüºÎ°¡ 1ÀÏ°æ¿ì 255
 	
 	int remainder=prefix%8;
 	
 	int i;
-	for(i=0;i<quota;i++){ // ì˜¥í…Ÿì— ê°’ ì±„ìš°ê¸°, (ì´ê²½ìš° 255ë¡œ ì±„ì›€) 
+	for(i=0;i<quota;i++){ // ¿ÁÅİ¿¡ °ª Ã¤¿ì±â, (ÀÌ°æ¿ì 255·Î Ã¤¿ò) 
 		*(sm+i)=255;	
 	} 	 
 	
@@ -221,7 +225,7 @@ void getSubnetmask(int prefix,int * sm){
 	}
 	
 	
-	// ëª«ì´  4 ì¼ë•ŒëŠ” 255.255.255.255ë¡œ ê³ ì • 
+	// ¸òÀÌ  4 ÀÏ¶§´Â 255.255.255.255·Î °íÁ¤ 
 	 
 	
 	
